@@ -1,6 +1,6 @@
 # datahub-skills
 
-Agent skills for working with DataHub — plan and review connectors, search the catalog, enrich metadata, trace lineage, manage data quality, and set up connections. Works with [Claude Code](https://claude.ai/claude-code), [Cortex Code](https://docs.snowflake.com/en/user-guide/cortex-code/cortex-code), [Cursor](https://cursor.sh), [Codex](https://openai.com/codex), [Copilot](https://github.com/features/copilot), [Gemini CLI](https://github.com/google-gemini/gemini-cli), [Windsurf](https://windsurf.com), and other [Agent Skills](https://skills.sh)-compatible tools.
+Agent skills for working with DataHub — plan and review connectors, search the catalog, enrich metadata, trace lineage, manage data quality, write grounded GraphQL queries, and set up connections. Works with [Claude Code](https://claude.ai/claude-code), [Cortex Code](https://docs.snowflake.com/en/user-guide/cortex-code/cortex-code), [Cursor](https://cursor.sh), [Codex](https://openai.com/codex), [Copilot](https://github.com/features/copilot), [Gemini CLI](https://github.com/google-gemini/gemini-cli), [Windsurf](https://windsurf.com), and other [Agent Skills](https://skills.sh)-compatible tools.
 
 ## What's in here
 
@@ -55,6 +55,16 @@ Install the DataHub CLI, configure authentication, verify connectivity, and set 
 > Set up my DataHub connection
 > /datahub-setup focus on Snowflake in the Finance domain
 > Create a profile for the data-eng team
+```
+
+#### GraphQL
+
+Build and validate DataHub GraphQL queries and mutations using live CLI introspection and open-source schema references. Generated search, scroll, and lineage operations follow [DataHub GraphQL best practices](https://docs.datahub.com/docs/api/graphql/graphql-best-practices). Answer whether a workflow is supported by GraphQL on your server.
+
+```
+> Write a searchAcrossEntities query with structured property filters
+> Does GraphQL expose batchAddTags? Show the input shape from --describe
+> /datahub-graphql mutation to set domain on multiple datasets
 ```
 
 ### Connector development skills
@@ -131,6 +141,7 @@ Then:
 > /datahub-lineage what feeds into the revenue dashboard?
 > /datahub-quality find datasets with failing assertions
 > /datahub-setup verify my connection
+> /datahub-graphql describe batchAddTags with full input types
 > /connector-review snowflake
 > /connector-planning duckdb
 ```
@@ -146,6 +157,7 @@ Cursor picks up skills from `.agents/skills/` automatically:
 
 ```
 > Search DataHub for customer tables
+> Help me compose a GraphQL query with variables for entity(urn: ...)
 > Review my DataHub connector
 > Plan a connector for ClickHouse
 ```
@@ -217,6 +229,7 @@ cp -r datahub-skills/skills/datahub-enrich           your-project/.agents/skills
 cp -r datahub-skills/skills/datahub-lineage          your-project/.agents/skills/
 cp -r datahub-skills/skills/datahub-quality          your-project/.agents/skills/
 cp -r datahub-skills/skills/datahub-setup            your-project/.agents/skills/
+cp -r datahub-skills/skills/datahub-graphql          your-project/.agents/skills/
 cp -r datahub-skills/skills/shared-references        your-project/.agents/skills/
 cp -r datahub-skills/skills/using-datahub            your-project/.agents/skills/
 
@@ -237,6 +250,7 @@ Each skill directory is self-contained. The `standards` symlinks get dereference
 | Lineage exploration         | Yes                   | Yes                                              |
 | Data quality management     | Yes                   | Yes                                              |
 | Connection setup            | Yes                   | Yes                                              |
+| GraphQL query assistance    | Yes                   | Yes                                              |
 | Planning workflow           | Yes                   | Yes                                              |
 | Load standards              | Yes                   | Yes                                              |
 | Review against standards    | Yes                   | Yes                                              |
@@ -258,6 +272,7 @@ Other platforms do the same things through natural language.
 | `/catalog-lineage [entity]`      | Explore lineage and trace dependencies           |
 | `/catalog-quality [entity]`      | Manage assertions, incidents, and subscriptions  |
 | `/catalog-setup [task]`          | Set up connection and configure defaults         |
+| `/catalog-graphql [task]`        | Build or validate GraphQL; introspect operations |
 
 ### Connector development
 
@@ -312,6 +327,10 @@ datahub-skills/
 │   │   ├── SKILL.md
 │   │   ├── references/
 │   │   └── templates/
+│   ├── datahub-graphql/             # GraphQL query/mutation assistance
+│   │   ├── SKILL.md
+│   │   ├── references/
+│   │   └── templates/
 │   ├── datahub-connector-planning/  # Connector planning
 │   │   ├── SKILL.md
 │   │   ├── standards -> ../../standards
@@ -341,6 +360,7 @@ datahub-skills/
 │   ├── catalog-lineage.md
 │   ├── catalog-quality.md
 │   ├── catalog-setup.md
+│   ├── catalog-graphql.md
 │   ├── connector-planning.md
 │   ├── connector-review.md
 │   └── load-standards.md
@@ -359,7 +379,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for commit conventions and release proces
 
 Where things live:
 
-- Catalog interaction skills: `skills/datahub-search/`, `skills/datahub-enrich/`, `skills/datahub-lineage/`, `skills/datahub-quality/`, `skills/datahub-setup/`
+- Catalog interaction skills: `skills/datahub-search/`, `skills/datahub-enrich/`, `skills/datahub-lineage/`, `skills/datahub-quality/`, `skills/datahub-setup/`, `skills/datahub-graphql/`
 - Shared references: `skills/shared-references/`
 - Connector standards: `standards/`
 - Review checklists: `skills/datahub-connector-pr-review/SKILL.md`

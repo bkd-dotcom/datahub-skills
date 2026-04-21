@@ -6,7 +6,7 @@ description: |
 
 # Using DataHub Skills
 
-You have access to 5 DataHub catalog interaction skills. Use this guide to route the user's request to the correct skill.
+You have access to 6 DataHub catalog interaction skills. Use this guide to route the user's request to the correct skill.
 
 ---
 
@@ -22,12 +22,19 @@ You have access to 5 DataHub catalog interaction skills. Use this guide to route
 | **Notifications** (subscribe to assertion failures, incidents) | **Quality** | `/datahub-quality` |
 | **Install CLI, authenticate, verify connection** | **Setup** | `/datahub-setup` |
 | **Configure default scopes and profiles** | **Setup** | `/datahub-setup` |
+| **GraphQL** (write queries/mutations, introspect schema, “can GraphQL do X?”, programmatic API access) | **GraphQL** | `/datahub-graphql` |
 
 ---
 
 ## Disambiguation Rules
 
 When the intent is ambiguous, use these rules:
+
+### GraphQL vs. Search vs. Enrich
+
+- **Search or CLI catalog commands** (no custom GraphQL) → **Search**
+- **Guided metadata updates** with approvals and curation workflows → **Enrich**
+- **Raw GraphQL** (custom queries/mutations, batch operations in GraphQL, schema discovery, feasibility of an API shape) → **GraphQL**
 
 ### "Tag" requests
 
@@ -66,6 +73,7 @@ When running `datahub` CLI commands, pass `-C skill=<name>` on the root command 
 ```bash
 datahub -C skill=datahub-search search "revenue"
 datahub -C skill=datahub-enrich graphql --query '...'
+datahub -C skill=datahub-graphql graphql --list-operations --format json
 datahub -C skill=datahub-lineage lineage --urn "..."
 ```
 
@@ -82,3 +90,4 @@ Use the skill name from the YAML frontmatter. If `-C` is not recognized, omit it
 5. **Enrich handles all metadata writes** — descriptions, tags, glossary terms, ownership, deprecation.
 6. **Quality handles data quality** — assertions, incidents, health checks, subscriptions.
 7. **Setup handles environment and configuration** — CLI install, auth, connectivity, default scopes.
+8. **GraphQL handles API-level operations** — introspection, composing queries/mutations for apps and scripts, and answering whether the GraphQL API supports a given pattern. Use **Search** or **Enrich** when the user does not need raw GraphQL.

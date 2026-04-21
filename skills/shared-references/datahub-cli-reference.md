@@ -261,6 +261,7 @@ Write operations use `datahub graphql --query 'mutation { ... }'`. The CLI does 
 
 - **Return field subselections required.** Mutations returning objects (not scalars like `Boolean`) need `{ urn }` or similar after the mutation. Without it: `SubselectionRequired` error.
 - **Long queries must use temp files.** Long inline `--query` strings get misinterpreted as file paths on macOS (`File name too long`). Write to a `.graphql` file and pass the path: `datahub graphql --query /tmp/my-mutation.graphql --format json`.
+- **Prefer one operation per `.graphql` file.** Multiple operations in one document usually need `--operation <Name>`; for several steps, split into separate files or use a small runner script that invokes `datahub graphql` once per file (see `datahub-graphql` skill: `references/introspection-patterns.md`).
 - **Short mutations can be inline.** Simple mutations like `addTag`, `removeTag`, `addOwner` are short enough to pass inline.
 
 ### Tags
@@ -458,11 +459,11 @@ datahub graphql --describe addTag --format json
 # Describe with full type expansion
 datahub graphql --describe addTag --recurse --format json
 
-# Dry run (preview without executing)
-datahub graphql --query '{ me { corpUser { urn } } }' --dry-run
+# Local schema directory (optional — describe/list without live server introspection)
+# datahub graphql --schema-path /path/to/graphql-schema-files ...
 
-# Agent best practices
-datahub graphql --agent-context
+# Execute query (no --dry-run on graphql — run hits the server)
+datahub graphql --query '{ me { corpUser { urn } } }' --format json
 ```
 
 ---

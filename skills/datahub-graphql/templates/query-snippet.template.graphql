@@ -1,0 +1,27 @@
+# Minimal GraphQL operation template for DataHub (reference only).
+# Prefer one query or mutation per .graphql file for `datahub graphql --query`;
+#   multiple operations in one file may require --operation <Name>.
+# Follow https://docs.datahub.com/docs/api/graphql/graphql-best-practices
+#   (field minimization, pagination/search vs scroll, searchFlags when applicable).
+# Replace operation name, fields, variables, and types using output from:
+#   datahub graphql --describe <OperationOrType> --recurse --format json
+
+query ExampleQuery($urn: String!) {
+  entity(urn: $urn) {
+    urn
+    type
+    ... on Dataset {
+      properties {
+        name
+        description
+      }
+    }
+  }
+}
+
+# Example mutation shape — verify inputs via --describe on your server.
+# mutation ExampleMutation($input: SomeInput!) {
+#   someMutation(input: $input) {
+#     urn
+#   }
+# }

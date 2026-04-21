@@ -1,0 +1,10 @@
+{
+  "skills": ["datahub-graphql"],
+  "query": "I need a GraphQL query to fetch an entity by URN with dataset fields — help me build it and make sure field names are correct for my server.",
+  "expected_behavior": [
+    "Instructs or demonstrates use of datahub graphql --describe (with --recurse when needed) or --list-operations to ground field and type names",
+    "States that datahub graphql has no --dry-run and validates via --describe/--recurse and execution of --query when appropriate",
+    "Does not assert specific GraphQL field names without verification from introspection or documented references",
+    "When generating search or scroll operations, aligns with DataHub GraphQL best practices (e.g. search vs scroll for pagination depth, stable urn sort for scroll, searchFlags when skipping highlights/aggregates) per https://docs.datahub.com/docs/api/graphql/graphql-best-practices"
+  ]
+}
