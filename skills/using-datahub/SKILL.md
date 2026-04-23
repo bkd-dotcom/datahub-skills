@@ -6,7 +6,7 @@ description: |
 
 # Using DataHub Skills
 
-You have access to 5 DataHub catalog interaction skills. Use this guide to route the user's request to the correct skill.
+You have access to 6 DataHub catalog interaction skills. Use this guide to route the user's request to the correct skill.
 
 ---
 
@@ -18,6 +18,7 @@ You have access to 5 DataHub catalog interaction skills. Use this guide to route
 | **Answer a question** about the catalog ("who owns X?", "how many X?") | **Search** | `/datahub-search` |
 | **Update metadata** (descriptions, tags, glossary terms, ownership, deprecation) | **Enrich** | `/datahub-enrich` |
 | **Explore lineage** (upstream, downstream, impact, root cause, dependencies) | **Lineage** | `/datahub-lineage` |
+| **Debug cross-platform lineage** (broken edges, URN mismatch, recipe fixes via CLI or UI GraphQL, re-ingest) | **Lineage debug** | `/datahub-lineage-debug` |
 | **Data quality** (assertions, incidents, health checks) | **Quality** | `/datahub-quality` |
 | **Notifications** (subscribe to assertion failures, incidents) | **Quality** | `/datahub-quality` |
 | **Install CLI, authenticate, verify connection** | **Setup** | `/datahub-setup` |
@@ -51,6 +52,11 @@ When the intent is ambiguous, use these rules:
 - **"What dashboards use table X"** → **Lineage** (relationship traversal)
 - **"Who owns X" / "what is X"** → **Search** (metadata lookup)
 
+### Lineage vs. Lineage debug
+
+- **Explore or visualize lineage** on entities that already exist in the graph → **Lineage** (`/datahub-lineage`)
+- **Broken or missing edges across systems**, **URN mismatch**, **adjust ingestion recipes** (files or **Manage Metadata Ingestion** / GraphQL) and **re-run ingest** to fix the graph → **Lineage debug** (`/datahub-lineage-debug`)
+
 ### Setup vs. other skills
 
 - **"Set up" / "install" / "authenticate" / "verify connection"** → **Setup**
@@ -67,6 +73,7 @@ When running `datahub` CLI commands, pass `-C skill=<name>` on the root command 
 datahub -C skill=datahub-search search "revenue"
 datahub -C skill=datahub-enrich graphql --query '...'
 datahub -C skill=datahub-lineage lineage --urn "..."
+datahub -C skill=datahub-lineage-debug ingest -c recipe.yml
 ```
 
 Use the skill name from the YAML frontmatter. If `-C` is not recognized, omit it — the command works the same without it.
@@ -77,7 +84,7 @@ Use the skill name from the YAML frontmatter. If `-C` is not recognized, omit it
 
 1. **Never guess the skill.** If the intent is genuinely ambiguous, ask the user to clarify.
 2. **One skill per request** unless the user explicitly asks for multiple operations.
-3. **Lineage is for lineage only** — not for general "what is this entity?" questions (that's Search).
+3. **Lineage is for lineage only** — not for general "what is this entity?" questions (that's Search). Use **Lineage debug** when the user is fixing cross-platform lineage or recipes, not routine traversal.
 4. **Search handles ad-hoc questions.** "Who owns X?" and "what columns does X have?" are Search questions, not Lineage.
 5. **Enrich handles all metadata writes** — descriptions, tags, glossary terms, ownership, deprecation.
 6. **Quality handles data quality** — assertions, incidents, health checks, subscriptions.
